@@ -14,12 +14,12 @@ public abstract class EFRepositoryBase<TKey, TEntity> : IRepository<TKey, TEntit
         DBContext = dBContext;
     }
 
-    public virtual async Task CreateAsync(TEntity entity)
+    public virtual async Task CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        await DbSet.AddAsync(entity);
-        await DBContext.SaveChangesAsync();
+        await DbSet.AddAsync(entity, cancellationToken);
+        await DBContext.SaveChangesAsync(cancellationToken);
     }
 
-    public virtual async Task<TEntity?> GetAsync(TKey id) =>
-        await DbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id!.Equals(id));
+    public virtual async Task<TEntity?> GetAsync(TKey id, CancellationToken cancellationToken = default) =>
+        await DbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id!.Equals(id), cancellationToken: cancellationToken);
 }

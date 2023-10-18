@@ -22,17 +22,17 @@ public abstract class LogRepository<TKey, TEntity> : EFRepositoryBase<TKey, TEnt
         _sysLogMapper = sysLogMapper;
     }
 
-    public override async Task CreateAsync(TEntity entity)
+    public override async Task CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-            await base.CreateAsync(entity);
+        await base.CreateAsync(entity, cancellationToken);
         try
         {
             var changeSet = JsonSerializer.Serialize(entity, options: new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve });
             var systemLog = _sysLogMapper.Map(entity, SystemLogType.Create);
             systemLog.ChangeSet = changeSet;
 
-            await DBContext.Set<SystemLog>().AddAsync(systemLog);
-            await DBContext.SaveChangesAsync();
+            await DBContext.Set<SystemLog>().AddAsync(systemLog, cancellationToken);
+            await DBContext.SaveChangesAsync(cancellationToken);
         }
         catch (Exception ex)
         {

@@ -31,22 +31,21 @@ public sealed class CompaniesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CompanyDto>> Create(CreateCompanyRequest request)
+    public async Task<ActionResult<CompanyDto>> Create(CreateCompanyRequest request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request);
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid) 
         {
             return BadRequest(new ValidationErrorResponse(validationResult.ToDictionary()));
         }
 
-        if (await _companyRepository.IsCompanyExistsAsync(request.Name))
+        if (await _companyRepository.IsCompanyExistsAsync(request.Name, cancellationToken))
         {
             return BadRequest(new NameMustBeUniqueErrorResponse());
         }
 
         var existingEmployeesIds = request.Employees.Where(x => x.Id.HasValue).Select(x => x.Id!.Value);
-        var existingEmployees = await _employeeRepository.GetEmployeesAsync(
-            existingEmployeesIds); 
+        var existingEmployees = await _employeeRepository.GetEmployeesAsync(existingEmployeesIds, cancellationToken); 
         
         var notExistingEmployeesIds = existingEmployeesIds.Where(x => !existingEmployees.Select(x => x.Id).Contains(x)).ToArray();
         if (notExistingEmployeesIds.Length > 0)
@@ -82,7 +81,7 @@ public sealed class CompaniesController : ControllerBase
         var existingEmails = new List<string>();
         foreach (var newEmployee in newEmployees) 
         {
-           if (await _employeeRepository.IsEmployeeExistsAsync(newEmployee.Email!))
+           if (await _employeeRepository.IsEmployeeExistsAsync(newEmployee.Email!, cancellationToken: cancellationToken))
            {
                 existingEmails.Add(newEmployee.Email!);
            } 
@@ -92,13 +91,13 @@ public sealed class CompaniesController : ControllerBase
            return BadRequest(new EmployeeEmailMustBeUniqueErrorResponse(existingEmails.ToArray())); 
         }
 
-        using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
         var company = new Company
         {
             Name = request.Name,
         };
         company.Employees.AddRange(existingEmployees);
-        await _companyRepository.CreateAsync(company);
+        await _companyRepository.CreateAsync(company, cancellationToken);
         
         foreach (var employeeToCreate in newEmployees)
         {
@@ -108,10 +107,10 @@ public sealed class CompaniesController : ControllerBase
                 Title = employeeToCreate.Title!.Value,
                 Companies = new() { company }
             };
-            await _employeeRepository.CreateAsync(employee);
+            await _employeeRepository.CreateAsync(employee, cancellationToken);
         }
 
-        await transaction.CommitAsync();
+        await transaction.CommitAsync(cancellationToken);
 
         return Ok(new CompanyDto(company));
     }

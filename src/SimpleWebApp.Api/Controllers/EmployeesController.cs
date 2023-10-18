@@ -26,20 +26,20 @@ public sealed class EmployeesController : ControllerBase
     }
 
     [HttpPost("")]
-    public async Task<ActionResult<EmployeeDto>> Create(CreateEmployeeRequest request)
+    public async Task<ActionResult<EmployeeDto>> Create(CreateEmployeeRequest request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request);
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid) 
         {
             return BadRequest(new ValidationErrorResponse(validationResult.ToDictionary()));
         }
 
-        if (await _employeeRepository.IsEmployeeExistsAsync(request.Email))
+        if (await _employeeRepository.IsEmployeeExistsAsync(request.Email, cancellationToken))
         {
             return BadRequest(new EmailMustBeUniqueErrorResponse());
         }
         
-        var companies = await _companyRepository.GetCompaniesWithEmployeesAsync(request.Companies);
+        var companies = await _companyRepository.GetCompaniesWithEmployeesAsync(request.Companies, cancellationToken);
         
         var nonExistsCompanies = request.Companies.Where(x => !companies.Select(x => x.Id).Contains(x)).ToArray();
         if (nonExistsCompanies.Length > 0)
@@ -63,7 +63,7 @@ public sealed class EmployeesController : ControllerBase
             Title = request.Title
         };
         employee.Companies.AddRange(companies);
-        await _employeeRepository.CreateAsync(employee);
+        await _employeeRepository.CreateAsync(employee, cancellationToken);
 
         return Ok(new EmployeeDto(employee));
     }

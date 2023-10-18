@@ -1,8 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
-using SimpleWebApp.Data.Core;
+using SimpleWebApp.Core.Data.Repositories;
+using SimpleWebApp.Core.Domain.Entities;
 using SimpleWebApp.Data.SysLog.Mappers;
 using SimpleWebApp.Data.SysLog.Repositories;
-using SimpleWebApp.Domain.Core.Entities;
 
 namespace SimpleWebApp.Data.SysLog;
 

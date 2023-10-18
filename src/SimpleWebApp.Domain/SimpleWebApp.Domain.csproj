@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\SimpleWebApp.Domain.Core\SimpleWebApp.Domain.Core.csproj" />
+    <ProjectReference Include="..\SimpleWebApp.Core\SimpleWebApp.Core.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

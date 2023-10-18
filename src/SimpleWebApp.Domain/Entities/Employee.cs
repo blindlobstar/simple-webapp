@@ -1,4 +1,4 @@
-using SimpleWebApp.Domain.Core.Entities;
+using SimpleWebApp.Core.Domain.Entities;
 using SimpleWebApp.Domain.Enums;
 
 namespace SimpleWebApp.Domain.Entities;

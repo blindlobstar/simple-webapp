@@ -1,11 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using SimpleWebApp.Data.Core;
-using SimpleWebApp.Domain.Core.Entities;
+using SimpleWebApp.Core.Domain.Entities;
 
-namespace SimpleWebApp.Data.EFCore;
+namespace SimpleWebApp.Core.Data.Repositories;
 
-public abstract class EFRepositoryBase<TKey, TEntity> : IRepository<TKey, TEntity> 
-    where TEntity : class, IEntity<TKey> 
+public abstract class EFRepositoryBase<TKey, TEntity> : IRepository<TKey, TEntity>
+    where TEntity : class, IEntity<TKey>
 {
     protected DbContext DBContext { get; private set; }
     protected DbSet<TEntity> DbSet => DBContext.Set<TEntity>();
@@ -21,6 +20,6 @@ public abstract class EFRepositoryBase<TKey, TEntity> : IRepository<TKey, TEntit
         await DBContext.SaveChangesAsync();
     }
 
-    public virtual async Task<TEntity?> GetAsync(TKey id) => 
+    public virtual async Task<TEntity?> GetAsync(TKey id) =>
         await DbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id!.Equals(id));
 }

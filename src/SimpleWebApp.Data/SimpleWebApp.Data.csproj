@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\SimpleWebApp.Data.EFCore\SimpleWebApp.Data.EFCore.csproj"/>
+    <ProjectReference Include="..\SimpleWebApp.Core\SimpleWebApp.Core.csproj"/>
     <ProjectReference Include="..\SimpleWebApp.Domain\SimpleWebApp.Domain.csproj"/>
   </ItemGroup>
   <ItemGroup>

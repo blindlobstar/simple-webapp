@@ -1,4 +1,4 @@
-using SimpleWebApp.Data.Core;
+using SimpleWebApp.Core.Data.Repositories;
 using SimpleWebApp.Domain.Entities;
 
 namespace SimpleWebApp.Data.Repositories;

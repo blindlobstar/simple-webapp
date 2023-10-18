@@ -1,4 +1,4 @@
-using SimpleWebApp.Domain.Core.Entities;
+using SimpleWebApp.Core.Domain.Entities;
 
 namespace SimpleWebApp.Data.SysLog;
 

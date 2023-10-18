@@ -1,4 +1,4 @@
-namespace SimpleWebApp.Domain.Core.Entities;
+namespace SimpleWebApp.Core.Domain.Entities;
 
 public abstract class EntityBase<TKey> : IEntity<TKey>
 {

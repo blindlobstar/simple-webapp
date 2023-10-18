@@ -2,9 +2,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SimpleWebApp.Data.EFCore;
+using SimpleWebApp.Core.Data.Repositories;
+using SimpleWebApp.Core.Domain.Entities;
 using SimpleWebApp.Data.SysLog.Mappers;
-using SimpleWebApp.Domain.Core.Entities;
 
 namespace SimpleWebApp.Data.SysLog.Repositories;
 

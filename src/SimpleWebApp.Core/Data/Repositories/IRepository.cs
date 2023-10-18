@@ -1,6 +1,6 @@
-using SimpleWebApp.Domain.Core.Entities;
+using SimpleWebApp.Core.Domain.Entities;
 
-namespace SimpleWebApp.Data.Core;
+namespace SimpleWebApp.Core.Data.Repositories;
 
 public interface IRepository<TKey, TEntity> where TEntity : IEntity<TKey>
 {

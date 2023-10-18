@@ -1,0 +1,25 @@
+version: '3.4'
+
+services:
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: testdb
+    volumes:
+      - testdb:/var/lib/postgresql/data
+  
+  test:
+    build:
+      context: .
+      dockerfile: test/SimpleWebApp.Api.IntegrationTests/Dockerfile
+    environment:
+      TestConnectionString: "Host=db;Port=5432;Database=testdb;Username=root;Password=root"
+    depends_on:
+      - db
+
+volumes:
+  testdb:

@@ -1,0 +1,45 @@
+version: '3.4'
+
+services:
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: simpledb 
+    volumes:
+      - simpledb:/var/lib/postgresql/data
+
+  migrator:
+    image: migrator
+    build:
+      context: .
+      dockerfile: src/SimpleWebApp.Data.Migrations/Dockerfile
+      args:
+        - configuration=Debug
+    environment:
+      ConnectionString__Migration: "Host=db;Port=5432;Database=simpledb;Username=root;Password=root"
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+    depends_on:
+      - db
+  
+  simpleapi:
+    image: simpleapi
+    build:
+      context: .
+      dockerfile: src/SimpleWebApp.Api/Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      ConnectionStrings__SimpleDB: "Host=db;Port=5432;Database=simpledb;Username=root;Password=root"
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+    depends_on:
+      - db
+      - migrator
+
+volumes:
+  simpledb:

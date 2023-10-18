@@ -27,6 +27,7 @@ public sealed class EmployeeDto
     public Guid Id { get; set; }
 
     [JsonPropertyName("title")]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public EmployeeTitle Title { get; set; }
 
     [JsonPropertyName("email")]

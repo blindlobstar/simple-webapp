@@ -12,5 +12,6 @@ public sealed class CompanyEmployee
     public string? Email { get; set; }
 
     [JsonPropertyName("title")]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public EmployeeTitle? Title { get; set; }
 }

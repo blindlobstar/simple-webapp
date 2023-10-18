@@ -9,6 +9,7 @@ using FluentValidation;
 using SimpleWebApp.Api.Dto.Companies;
 using SimpleWebApp.Api.Validators;
 using SimpleWebApp.Api.Dto.Employees;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,10 @@ builder.Services.AddScoped<IValidator<CreateEmployeeRequest>, CreateEmployeeVali
 builder.Services.AddScoped<IValidator<CreateCompanyRequest>, CreateCompanyValidator>();
 
 // Infrastructure 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(opt =>
+{
+    opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 builder.Services.AddOpenApiDocument();
 
 

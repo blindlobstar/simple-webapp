@@ -8,6 +8,6 @@ public sealed class EmployeeNotExistsErrorResponse : ErrorResponse<Guid[]>
     }
 
     public override uint Code => 10000;
-    public override string ErrorMessage => "Trying to add non existing employee";
+    public override string ErrorMessage => "One or more of the employees do not exist";
     public override Guid[] Details { get; protected set; }
 }

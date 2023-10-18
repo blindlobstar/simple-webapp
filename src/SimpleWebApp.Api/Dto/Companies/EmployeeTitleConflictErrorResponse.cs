@@ -10,6 +10,6 @@ public sealed class EmployeeTitleConflictErrorResponse : ErrorResponse<Dictionar
     }
 
     public override uint Code => 10001;
-    public override string ErrorMessage => "Employee title conflict";
+    public override string ErrorMessage => "One or more employees have conflicting titles";
     public override Dictionary<EmployeeTitle, CompanyEmployee[]> Details { get; protected set; }
 }
